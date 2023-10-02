@@ -1,0 +1,53 @@
+import hashlib
+import time
+
+class Block:
+    def __init__(self, index, previous_hash, timestamp, data, hash):
+        self.index = index
+        self.previous_hash = previous_hash
+        self.timestamp = timestamp
+        self.data = data
+        self.hash = hash
+
+def calculate_hash(index, previous_hash, timestamp, data):
+    return hashlib.sha256(f"{index}{previous_hash}{timestamp}{data}".encode('utf-8')).hexdigest()
+
+def create_genesis_block():
+    return Block(0, "0", time.time(), "Genesis Block", calculate_hash(0, "0", time.time(), "Genesis Block"))
+
+def create_new_block(prev_block, data):
+    index = prev_block.index + 1
+    timestamp = time.time()
+    hash = calculate_hash(index, prev_block.hash, timestamp, data)
+    return Block(index, prev_block.hash, timestamp, data, hash)
+
+# Simulation function to add blocks to the Blockchain
+def simulate_blockchain(num_blocks):
+    blockchain = [create_genesis_block()]
+    prev_block = blockchain[0]
+
+    for i in range(1, num_blocks):
+        data = f"Block {i} Data"
+        new_block = create_new_block(prev_block, data)
+        blockchain.append(new_block)
+        prev_block = new_block
+
+    return blockchain
+
+# Print the Blockchain
+def print_blockchain(blockchain):
+    for block in blockchain:
+        print(f"Block {block.index}:")
+        print(f"Data: {block.data}")
+        print(f"Timestamp: {block.timestamp}")
+        print(f"Previous Hash: {block.previous_hash}")
+        print(f"Hash: {block.hash}")
+        print("=" * 20)
+
+# Main Program
+if __name__ == "__main__":
+    num_blocks_to_simulate = 10
+    blockchain_simulation = simulate_blockchain(num_blocks_to_simulate)
+    print_blockchain(blockchain_simulation)
+
+

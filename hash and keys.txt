@@ -1,0 +1,79 @@
+import hashlib
+name = 'Blockchain'
+encoded_name = name.encode()
+print('SHA256')
+hashed_name = hashlib.sha256(encoded_name)
+print("Object:", hashed_name)
+print("Hexadecimal format:", hashed_name.hexdigest())
+print('SHA512')
+hashed_name = hashlib.sha512(encoded_name)
+print("Object:", hashed_name)
+print("Hexadecimal format:", hashed_name.hexdigest())
+print('SHA224')
+hashed_name = hashlib.sha224(encoded_name)
+print("Object:", hashed_name)
+print("Hexadecimal format:", hashed_name.hexdigest())
+
+# Multiplicative inverse
+def exteuclid(a, b):
+     
+    r1 = a 
+    r2 = b
+    s1 = 1
+    s2 = 0
+    t1 = 0
+    t2 = 1
+     
+    while r2 > 0:
+         
+        q = r1//r2
+        r = r1-q * r2
+        r1 = r2
+        r2 = r
+        s = s1-q * s2
+        s1 = s2
+        s2 = s
+        t = t1-q * t2
+        t1 = t2
+        t2 = t
+         
+    if t1 < 0:
+        t1 = t1 % a
+         
+    return (r1, t1)
+ 
+
+p = 823
+q = 953
+n = p * q
+Pn = (p-1)*(q-1)
+ 
+
+ 
+
+e = int(313)
+ 
+r, d = exteuclid(Pn, e)
+if r == 1:
+    d = int(d)
+    print("Public key pair is: ", d,",",n)
+    print("Private key pair is: ", e,",",n)
+     
+else:
+    print("Multiplicative inverse for\
+    the given encryption key does not \
+    exist. Choose a different encryption key ")
+  
+  
+# message to be sent
+M = 19070
+print("Plain text is: ", M)
+ 
+# Signature is created by Alice
+C = (M**e) % n
+print("Cipher text is: ", C)
+
+print("------Receiver side--------")
+
+M1 = (C**d) % n
+print("Dencrypted text is: ", M1)
